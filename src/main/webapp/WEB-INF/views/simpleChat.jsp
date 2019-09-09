@@ -1,0 +1,29 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<html>
+<body>
+<h2>${chat.name}</h2>
+<p>
+    <c:forEach items="${chat.messages}" var="message">
+    <div class="message-info-tablet">
+        <img src="${message.sender.profilePhoto.path}" class="tablet-photo"/>
+<p>${message.sender.firstName} ${message.sender.lastName} | ${message.sendingTime}</p>
+<hr>
+<p>${message.text}</p>
+</div>
+</c:forEach>
+</p>
+<hr>
+<p>
+    <c:url var="writeToSimpleChat" value="/write-to-simple-chat-${chat.id}"/>
+    <form:form method="POST" modelAttribute="messageWrapper"
+               action="${writeToSimpleChat}?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
+        <form:textarea path="text"/><br>
+        <form:input type="file" path="addendum"/><br>
+        <input type="submit" value="Send"/>
+    </form:form>
+</p>
+</body>
+</html>

@@ -1,0 +1,149 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    border-bottom: 2px solid grey;
+}
+
+header, #navigational-menu {
+    background-color: #5cb173;
+}
+
+footer {
+    background-color: #232323;
+    border-top: 2px solid grey;
+    height: 20vh;
+}
+
+#header-content, #footer-content {
+    height: 100%;
+    display: flex;
+}
+
+#header-logo {
+    margin: 15px;
+    width: 20vw;
+    height: 10vh;
+    display: flex;
+}
+
+#header-logo h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: white;
+}
+
+#logo-img {
+    height: 80%;
+    width: auto;
+    margin-left: 10px;
+}
+
+#content-wrapper {
+    flex-grow: 2;
+    display: flex;
+}
+
+#content {
+    flex-grow: 2;
+}
+
+#navigational-menu {
+    background-color: #5cb173;
+    border-right: 2px solid grey;
+    width: 20vw;
+}
+
+.input-form {
+    display: inline-block;
+    background-color: lightgray;
+    min-width: 20vw;
+    border: 2px solid grey;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px;
+}
+
+.input-form-head {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.input-form-body {
+    margin: 10px 0;
+}
+
+.input-form h2 {
+    margin: 0;
+}
+
+.user-table {
+    border-collapse: collapse;
+}
+
+.user-table td, th {
+    border: 2px solid grey;
+    padding: 10px;
+}
+
+.user-info-tablet, .chat-info-tablet, .message-info-tablet {
+    border: 2px solid grey;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.tablet-photo {
+    float: left;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.form-group-item, .row {
+    margin: 10px 0;
+}
+
+.form-control {
+    border: 2px solid grey;
+    border-radius: 5px;
+    height: 20px;
+}
+
+.floatRight {
+    float: right;
+}
+
+.profile-photo {
+    width: 250px;
+    height: 250px;
+}
+
+.alert {
+    font-weight: bold;
+}
+
+.alert-success {
+    color: #7ec425;
+}
+
+.alert-info {
+    color: dodgerblue;
+}
+
+.alert-warning {
+    color: orange;
+}
+
+.alert-error {
+    color: red;
+}
