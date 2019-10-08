@@ -1,6 +1,6 @@
 package com.springfrog.service;
 
-import com.springfrog.dao.AddendumContentDao;
+import com.springfrog.dao.MediaContentDao;
 import com.springfrog.dao.MessageDao;
 import com.springfrog.dao.UserDao;
 import com.springfrog.dto.*;
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private DocumentService documentService;
 
     @Autowired
-    private AddendumContentDao addendumContentDao;
+    private MediaContentDao mediaContentDao;
 
     @Override
     public User findById(int id) {
@@ -122,22 +122,20 @@ public class UserServiceImpl implements UserService {
         String text = messageWrapper.getText();
         text = (text == null ? null : text.trim());
         MultipartFile file = messageWrapper.getAddendum();
-        AddendumContent addendumContent = null;
-        if (file != null) {
+        MediaContent mediaContent = null;
+        if (file != null && !file.isEmpty()) {
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
             String filename = documentService.generateFilename(extension);
             Document document = documentService.createDocument(filename);
             documentService.saveFile(file, filename);
             documentService.saveDocument(document);
-            addendumContent = new AddendumContent(document.getId(), AddendumContentType.DOCUMENT.getContentType());
-            addendumContentDao.save(addendumContent);
+            mediaContent = document;
         }
 
         Message message = new Message(text);
         message.setMessageHolder(messageHolder);
-        //User sender = findBySSO(messageHolder.getSender().getSsoId());
         message.setSender(messageHolder.getSender());
-        message.setAddendumContent(addendumContent);
+        message.setMediaContent(mediaContent);
         messageDao.save(message);
         Hibernate.initialize(messageHolder.getMessages());
         messageHolder.getMessages().add(message);

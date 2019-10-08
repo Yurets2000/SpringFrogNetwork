@@ -34,9 +34,9 @@
                                 </form:form>
                             </c:when>
                             <c:otherwise>
-                                <c:url var="add" value="/add-friend-${searchedUser.user.ssoId}"/>
+                                <c:url var="add" value="/accept-invitation-from-search-${searchedUser.user.ssoId}"/>
                                 <form:form method="POST" action="${add}">
-                                    <input type="submit" value="Add To Friends"/>
+                                    <input type="submit" value="Accept Invitation"/>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -8,11 +9,15 @@
 <p>
     <c:forEach items="${chat.messages}" var="message">
     <div class="message-info-tablet">
-        <img src="${message.sender.profilePhoto.path}" class="tablet-photo"/>
-<p>${message.sender.firstName} ${message.sender.lastName} | ${message.sendingTime}</p>
-<hr>
-<p>${message.text}</p>
+        <div class="message-header">
+            <img src="${message.sender.profilePhoto.path}" class="tablet-photo"/>
+<p>${message.sender.firstName} ${message.sender.lastName}</p>
 </div>
+<hr>
+<%@include file="messageContent.jsp" %>
+<p class="message-footer"><fmt:formatDate type="time" value="${message.sendingTime}"/></p>
+</div>
+<br>
 </c:forEach>
 </p>
 <hr>

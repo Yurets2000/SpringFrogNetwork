@@ -37,6 +37,10 @@
         <put-attribute name="title" value="Users List"/>
         <put-attribute name="body" value="/WEB-INF/views/usersList.jsp"/>
     </definition>
+    <definition name="invitations" extends="user-template">
+        <put-attribute name="title" value="Invitations"/>
+        <put-attribute name="body" value="/WEB-INF/views/invitations.jsp"/>
+    </definition>
     <definition name="friends" extends="user-template">
         <put-attribute name="title" value="Friends"/>
         <put-attribute name="body" value="/WEB-INF/views/friends.jsp"/>

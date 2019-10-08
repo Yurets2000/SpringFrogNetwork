@@ -36,10 +36,11 @@ public class InitServiceImpl implements InitService {
         User user1 = new User("yurets2000", "12345",
                 "Yura", "Bezlyudnyy", "uraura05052000@gmail.com");
         user1.setUserProfiles(new HashSet<>(
-                Arrays.asList(userProfileDao.findByType(UserProfileType.ADMIN.toString()))));
+                Arrays.asList(userProfileDao.findByType(UserProfileType.ADMIN.getUserProfileType()))));
         User user2 = new User("stas2000", "1111",
                 "Stas", "Bezpalko", "pandanom@gmail.com");
-
+        user2.setUserProfiles(new HashSet<>(
+                Arrays.asList(userProfileDao.findByType(UserProfileType.USER.getUserProfileType()))));
         userDao.save(user1);
         userDao.save(user2);
 

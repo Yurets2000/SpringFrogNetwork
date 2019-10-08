@@ -32,8 +32,8 @@ public class Message implements Serializable {
     private MessageHolder messageHolder;
 
     @ManyToOne
-    @JoinColumn(name = "ADDENDUM_CONTENT")
-    private AddendumContent addendumContent;
+    @JoinColumn(name = "MEDIA_CONTENT")
+    private MediaContent mediaContent;
 
     public Message() {
     }
@@ -78,12 +78,12 @@ public class Message implements Serializable {
         this.messageHolder = messageHolder;
     }
 
-    public AddendumContent getAddendumContent() {
-        return addendumContent;
+    public MediaContent getMediaContent() {
+        return mediaContent;
     }
 
-    public void setAddendumContent(AddendumContent addendumContent) {
-        this.addendumContent = addendumContent;
+    public void setMediaContent(MediaContent mediaContent) {
+        this.mediaContent = mediaContent;
     }
 
     @Override

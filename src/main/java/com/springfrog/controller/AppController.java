@@ -74,9 +74,11 @@ public class AppController {
             System.out.println("---------------ANONYMOUS--------------------");
             return "index";
         } else {
+            System.out.println("Principal: " + getPrincipal().getFirstName() + " " + getPrincipal().getLastName() + "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             Set<UserProfile> principalProfiles = getPrincipal().getUserProfiles();
             for (UserProfile profile : principalProfiles) {
                 String type = profile.getType();
+                System.out.println("TYPE: " + type + "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 if (type.equals(ADMIN.toString()) || type.equals(DBA.toString())) {
                     System.out.println("---------------LIST--------------------");
                     return "redirect:/list";
@@ -173,14 +175,14 @@ public class AppController {
     public String updateUser(@Valid User user, BindingResult result,
                              ModelMap model, @PathVariable String ssoId) {
         if (result.hasErrors()) {
-            return "registration";
+            return "userForm";
         }
 
         userService.updateUser(user);
 
         model.addAttribute("success", "User " + user.getFirstName() + " " + user.getLastName() + " updated successfully");
         model.addAttribute("loggedInUser", getPrincipal().getSsoId());
-        return "registrationSuccess";
+        return "redirect:/list";
     }
 
     @RequestMapping(value = "/delete-user-{ssoId}", method = RequestMethod.GET)
@@ -228,38 +230,54 @@ public class AppController {
         return "friends";
     }
 
+    @Transactional
+    @RequestMapping(value = "/invitations", method = RequestMethod.GET)
+    public String invitationsPage(ModelMap modelMap) {
+        User principal = getPrincipal();
+        Hibernate.initialize(principal.getInvites());
+        modelMap.put("invites", principal.getInvites());
+        return "invitations";
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchPage(ModelMap modelMap) {
-        modelMap.put("searchedUser", null);
+        if (!modelMap.containsAttribute("searchedUser")) {
+            modelMap.put("searchedUser", null);
+        }
         return "search";
     }
 
     @Transactional
     @RequestMapping(value = "/search-user", method = RequestMethod.GET)
-    public String searchUser(@RequestParam String ssoId, ModelMap modelMap) {
-        User user = userService.findBySSO(ssoId);
-        User principal = getPrincipal();
-        modelMap.addAttribute("searchedUser", new SearchedUser(user,
-                userService.canAddToFriends(principal, user),
-                userService.isAlreadyInvited(principal, user),
-                userService.isAlreadyInvited(user, principal)));
-        return "search";
+    public String searchUser(@RequestParam String ssoId, RedirectAttributes attributes) {
+        attributes.addFlashAttribute("searchedUser", getSearchedUser(ssoId));
+        return "redirect:/search";
     }
 
     @Transactional
     @RequestMapping(value = "/invite-user-{ssoId}", method = RequestMethod.POST)
-    public String inviteUser(@PathVariable String ssoId) {
+    public String inviteUser(@PathVariable String ssoId, RedirectAttributes attributes) {
         User invitee = userService.findBySSO(ssoId);
         userService.inviteUser(getPrincipal(), invitee);
-        return "search";
+        attributes.addFlashAttribute("searchedUser", getSearchedUser(ssoId));
+        return "redirect:/search";
     }
 
     @Transactional
-    @RequestMapping(value = "/add-friend-{ssoId}", method = RequestMethod.POST)
-    public String addFriend(@PathVariable String ssoId) {
-        User friend = userService.findBySSO(ssoId);
-        userService.addToFriends(getPrincipal(), friend);
-        return "search";
+    @RequestMapping(value = "/accept-invitation-from-search-{ssoId}", method = RequestMethod.POST)
+    public String acceptInvitationFromSearch(@PathVariable String ssoId, RedirectAttributes attributes) {
+        User invitor = userService.findBySSO(ssoId);
+        userService.addToFriends(getPrincipal(), invitor);
+        attributes.addFlashAttribute("searchedUser", getSearchedUser(ssoId));
+        return "redirect:/search";
+    }
+
+    @Transactional
+    @RequestMapping(value = "/accept-invitation-from-invitations-{ssoId}", method = RequestMethod.POST)
+    public String acceptInvitationFromInvitations(@PathVariable String ssoId, RedirectAttributes attributes) {
+        User invitor = userService.findBySSO(ssoId);
+        userService.addToFriends(getPrincipal(), invitor);
+        return "redirect:/invitations";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
@@ -327,6 +345,16 @@ public class AppController {
         userService.addMessage(chat, messageWrapper);
         attributes.addAttribute("chatId", chat.getId());
         return "redirect:/simple-chat-{chatId}";
+    }
+
+    private SearchedUser getSearchedUser(String ssoId) {
+        User user = userService.findBySSO(ssoId);
+        if (user == null) return null;
+        User principal = getPrincipal();
+        return new SearchedUser(user,
+                userService.canAddToFriends(principal, user),
+                userService.isAlreadyInvited(principal, user),
+                userService.isAlreadyInvited(user, principal));
     }
 
     private User getPrincipal() {
