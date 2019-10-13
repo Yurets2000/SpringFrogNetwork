@@ -10,7 +10,7 @@
     <c:forEach items="${chat.messages}" var="message">
     <div class="message-info-tablet">
         <div class="message-header">
-            <img src="${message.sender.profilePhoto.path}" class="tablet-photo"/>
+            <img src="downloaded/${message.sender.profilePhoto.path}" class="tablet-photo"/>
 <p>${message.sender.firstName} ${message.sender.lastName}</p>
 </div>
 <hr>

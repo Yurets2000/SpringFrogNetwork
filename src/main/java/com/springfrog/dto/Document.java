@@ -14,10 +14,14 @@ public class Document extends MediaContent implements Serializable {
     @Column(name = "PATH", nullable = false)
     private String path;
 
+    @Column(name = "FILENAME", nullable = false)
+    private String filename;
+
     public Document() {
     }
 
-    public Document(String path) {
+    public Document(String filename, String path) {
+        this.filename = filename;
         this.path = path;
     }
 
@@ -27,5 +31,13 @@ public class Document extends MediaContent implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

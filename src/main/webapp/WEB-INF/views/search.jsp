@@ -15,7 +15,7 @@
         </c:when>
         <c:otherwise>
             <div class="user-info-tablet">
-                <img src="${searchedUser.user.profilePhoto.path}" class="tablet-photo"/>
+                <img src="downloaded/${searchedUser.user.profilePhoto.path}" class="tablet-photo"/>
                 <p>${searchedUser.user.firstName} ${searchedUser.user.lastName}</p>
                 <p>
                     <c:url var="viewProfile" value="/view-profile-${searchedUser.user.ssoId}"/>

@@ -9,6 +9,8 @@ public class GroupChat extends MessageHolder {
 
     private static final long serialVersionUID = -9075480816810793282L;
 
+    private static final String DEFAULT_PHOTO = "default_photo.jpg";
+
     @ManyToOne
     @JoinColumn(name = "CREATOR", nullable = false)
     private User creator;
@@ -48,7 +50,7 @@ public class GroupChat extends MessageHolder {
     }
 
     public Document getPhoto() {
-        return photo == null ? new Document("downloaded/default_photo.jpg") : photo;
+        return photo == null ? new Document(DEFAULT_PHOTO, DEFAULT_PHOTO) : photo;
     }
 
     public void setPhoto(Document photo) {

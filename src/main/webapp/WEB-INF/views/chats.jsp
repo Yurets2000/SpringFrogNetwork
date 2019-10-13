@@ -8,7 +8,7 @@
         <c:forEach items="${chats}" var="chat">
             <a href="<c:url value="/simple-chat-${chat.id}" />">
                 <div class="chat-info-tablet">
-                    <img src="${chat.photo.path}" class="tablet-photo"/>
+                    <img src="downloaded/${chat.photo.path}" class="tablet-photo"/>
                     <p>${chat.name}</p>
                 </div>
             </a>

@@ -1,5 +1,7 @@
 package com.springfrog.dto;
 
+import com.springfrog.utils.MediaContentMnemonicResolver;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -16,19 +18,8 @@ public class MediaContent implements Serializable {
     @Column(name = "MEDIA_CONTENT_ID")
     private Integer id;
 
-//    @Column(name = "REFERENCE_ID", nullable = false)
-//    private Integer referenceId;
-
-//    @Column(name = "CONTENT_TYPE")
-//    private String contentType;
-
     public MediaContent() {
     }
-
-//    public MediaContent(Integer referenceId, String contentType) {
-//        this.referenceId = referenceId;
-//        this.contentType = contentType;
-//    }
 
     public Integer getId() {
         return id;
@@ -38,21 +29,9 @@ public class MediaContent implements Serializable {
         this.id = id;
     }
 
-//    public Integer getReferenceId() {
-//        return referenceId;
-//    }
-//
-//    public void setReferenceId(Integer referenceId) {
-//        this.referenceId = referenceId;
-//    }
-//
-//    public String getContentType() {
-//        return contentType;
-//    }
-//
-//    public void setContentType(String contentType) {
-//        this.contentType = contentType;
-//    }
+    public String getMnemonic() {
+        return MediaContentMnemonicResolver.resolveMnemonic(this).toString();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -71,8 +50,6 @@ public class MediaContent implements Serializable {
     public String toString() {
         return "MediaContent{" +
                 "id=" + id +
-//                ", referenceId=" + referenceId +
-//                ", contentType=" + contentType +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.springfrog.controller;
 
+import com.springfrog.dto.Document;
 import com.springfrog.dto.SimpleChat;
 import com.springfrog.dto.User;
 import com.springfrog.dto.UserProfile;
@@ -46,7 +47,13 @@ public class AppController {
     UserService userService;
 
     @Autowired
+    DocumentService documentService;
+
+    @Autowired
     UserProfileService userProfileService;
+
+    @Autowired
+    MessageService messageService;
 
     @Autowired
     SimpleChatService simpleChatService;
@@ -71,19 +78,14 @@ public class AppController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage() {
         if (isCurrentAuthenticationAnonymous()) {
-            System.out.println("---------------ANONYMOUS--------------------");
             return "index";
         } else {
-            System.out.println("Principal: " + getPrincipal().getFirstName() + " " + getPrincipal().getLastName() + "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             Set<UserProfile> principalProfiles = getPrincipal().getUserProfiles();
             for (UserProfile profile : principalProfiles) {
                 String type = profile.getType();
-                System.out.println("TYPE: " + type + "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 if (type.equals(ADMIN.toString()) || type.equals(DBA.toString())) {
-                    System.out.println("---------------LIST--------------------");
                     return "redirect:/list";
                 } else if (type.equals(USER.toString())) {
-                    System.out.println("---------------PROFILE--------------------");
                     return "redirect:/profile";
                 }
             }
@@ -342,9 +344,17 @@ public class AppController {
         User principal = getPrincipal();
         SimpleChat chat = simpleChatService.findById(chatId);
         simpleChatService.initializeSimpleChat(principal, chat);
-        userService.addMessage(chat, messageWrapper);
+        messageService.addMessage(chat, messageWrapper);
         attributes.addAttribute("chatId", chat.getId());
         return "redirect:/simple-chat-{chatId}";
+    }
+
+    @RequestMapping(value = "/download-file-{documentId}")
+    public String downloadFile(@PathVariable Integer documentId, HttpServletRequest request,
+                               HttpServletResponse response) {
+        Document document = documentService.findById(documentId);
+        documentService.downloadFile(document, response);
+        return "redirect:" + request.getHeader("Referer");
     }
 
     private SearchedUser getSearchedUser(String ssoId) {
@@ -360,7 +370,6 @@ public class AppController {
     private User getPrincipal() {
         String userName;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         if (principal instanceof UserDetails) {
             userName = ((UserDetails) principal).getUsername();
         } else {

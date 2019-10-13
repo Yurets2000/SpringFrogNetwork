@@ -1,8 +1,6 @@
 package com.springfrog.service;
 
-import com.springfrog.dto.MessageHolder;
 import com.springfrog.dto.User;
-import com.springfrog.model.MessageWrapper;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.List;
@@ -34,8 +32,6 @@ public interface UserService {
     void removeFromBlackList(User user, User offender);
 
     void updateProfilePhoto(User user, CommonsMultipartFile file);
-
-    void addMessage(MessageHolder messageHolder, MessageWrapper messageWrapper);
 
     boolean isAlreadyInvited(User inviter, User invitee);
 

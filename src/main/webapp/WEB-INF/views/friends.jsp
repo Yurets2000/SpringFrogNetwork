@@ -8,7 +8,7 @@
         <c:forEach items="${friends}" var="friend">
             <a href="<c:url value="/view-profile-${friend.ssoId}"/>">
                 <div class="user-info-tablet">
-                    <img src="${friend.profilePhoto.path}" class="tablet-photo"/>
+                    <img src="downloaded/${friend.profilePhoto.path}" class="tablet-photo"/>
                     <p>${friend.firstName} ${friend.lastName}</p>
                 </div>
             </a>

@@ -4,7 +4,7 @@
 <html>
 <body>
 <p>
-    <img src="${user.profilePhoto.path}" class="profile-photo"/>
+    <img src="downloaded/${user.profilePhoto.path}" class="profile-photo"/>
     <c:if test="${user.ssoId.equals(loggedInUser)}">
         <c:url var="uploadPhoto" value="/upload-photo"/>
         <form:form method="POST" action="${uploadPhoto}?${_csrf.parameterName}=${_csrf.token}"

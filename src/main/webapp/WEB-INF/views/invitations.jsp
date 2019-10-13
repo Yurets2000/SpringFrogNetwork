@@ -8,7 +8,7 @@
         <c:forEach items="${invites}" var="invitor">
             <a href="<c:url value="/view-profile-${invitor.ssoId}"/>">
                 <div class="user-info-tablet">
-                    <img src="${invitor.profilePhoto.path}" class="tablet-photo"/>
+                    <img src="downloaded/${invitor.profilePhoto.path}" class="tablet-photo"/>
                     <p>${invitor.firstName} ${invitor.lastName}</p>
                     <p>
                         <c:url var="add" value="/accept-invitation-from-invitations-${invitor.ssoId}"/>

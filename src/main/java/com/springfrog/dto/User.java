@@ -12,6 +12,9 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -6567953653522483880L;
 
+    private static final String DELETED_PHOTO = "deleted_photo.png";
+    private static final String DEFAULT_PHOTO = "default_photo.jpg";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
@@ -86,6 +89,9 @@ public class User implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "USER_PROFILE_ID")})
     private Set<UserProfile> userProfiles = new HashSet<>();
 
+    @OneToMany
+    private List<Document> documents = new LinkedList<>();
+
     public User() {
     }
 
@@ -155,9 +161,9 @@ public class User implements Serializable {
 
     public Document getProfilePhoto() {
         if (deleted) {
-            return new Document("downloaded/deleted_photo.png");
+            return new Document(DELETED_PHOTO, DELETED_PHOTO);
         }
-        return profilePhoto == null ? new Document("downloaded/default_photo.jpg") : profilePhoto;
+        return profilePhoto == null ? new Document(DEFAULT_PHOTO, DEFAULT_PHOTO) : profilePhoto;
     }
 
     public void setProfilePhoto(Document profilePhoto) {
@@ -194,6 +200,10 @@ public class User implements Serializable {
 
     public List<User> getInvitees() {
         return invitees;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
     }
 
     @Override

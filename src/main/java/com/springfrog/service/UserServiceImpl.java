@@ -1,18 +1,14 @@
 package com.springfrog.service;
 
-import com.springfrog.dao.MediaContentDao;
-import com.springfrog.dao.MessageDao;
 import com.springfrog.dao.UserDao;
-import com.springfrog.dto.*;
-import com.springfrog.model.MessageWrapper;
-import org.apache.commons.io.FilenameUtils;
+import com.springfrog.dto.Document;
+import com.springfrog.dto.User;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.List;
@@ -29,13 +25,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    private MessageDao messageDao;
-
-    @Autowired
     private DocumentService documentService;
-
-    @Autowired
-    private MediaContentDao mediaContentDao;
 
     @Override
     public User findById(int id) {
@@ -109,36 +99,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateProfilePhoto(User user, CommonsMultipartFile file) {
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        String filename = documentService.generateFilename(extension);
-        Document photo = documentService.createDocument(filename);
-        documentService.saveFile(file, filename);
-        documentService.saveDocument(photo);
+        Document photo = documentService.createAndSaveDocument(file);
         user.setProfilePhoto(photo);
-    }
-
-    @Override
-    public void addMessage(MessageHolder messageHolder, MessageWrapper messageWrapper) {
-        String text = messageWrapper.getText();
-        text = (text == null ? null : text.trim());
-        MultipartFile file = messageWrapper.getAddendum();
-        MediaContent mediaContent = null;
-        if (file != null && !file.isEmpty()) {
-            String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-            String filename = documentService.generateFilename(extension);
-            Document document = documentService.createDocument(filename);
-            documentService.saveFile(file, filename);
-            documentService.saveDocument(document);
-            mediaContent = document;
-        }
-
-        Message message = new Message(text);
-        message.setMessageHolder(messageHolder);
-        message.setSender(messageHolder.getSender());
-        message.setMediaContent(mediaContent);
-        messageDao.save(message);
-        Hibernate.initialize(messageHolder.getMessages());
-        messageHolder.getMessages().add(message);
     }
 
     @Override
